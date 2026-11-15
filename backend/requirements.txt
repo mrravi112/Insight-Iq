@@ -1,0 +1,19 @@
+fastapi>=0.110
+uvicorn[standard]>=0.29
+sqlalchemy>=2.0
+python-multipart
+pandas>=2.2
+numpy
+scikit-learn
+openpyxl
+xlrd
+pdfplumber
+python-docx
+reportlab
+vaderSentiment
+python-dotenv
+pytest
+httpx
+# Optional, for SENTIMENT_BACKEND=transformers:
+# transformers
+# torch

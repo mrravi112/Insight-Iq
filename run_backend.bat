@@ -1,0 +1,6 @@
+@echo off
+cd /d "%~dp0backend"
+echo Activating Python virtual environment...
+call .venv\Scripts\activate
+echo Starting InsightIQ FastAPI Backend on http://127.0.0.1:8000...
+python -m uvicorn app.main:app --reload --port 8000

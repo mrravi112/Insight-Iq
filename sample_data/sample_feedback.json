@@ -1,0 +1,202 @@
+[
+ {
+  "feedback": "Notes and recordings were easy to access.",
+  "course": "Data Structures",
+  "faculty": "Faculty A",
+  "semester": "2025-Fall",
+  "date": "2025-11-21",
+  "rating": 1
+ },
+ {
+  "feedback": "Labs and practical sessions were very useful.",
+  "course": "Data Structures",
+  "faculty": "Faculty A",
+  "semester": "2025-Fall",
+  "date": "2025-10-19",
+  "rating": 1
+ },
+ {
+  "feedback": "The instructor is approachable and answers my doubts patiently. But tssignments are excessive and deadlines are too tight.",
+  "course": "Data Structures",
+  "faculty": "Faculty A",
+  "semester": "2025-Fall",
+  "date": "2025-11-14",
+  "rating": 1
+ },
+ {
+  "feedback": "The syllabus is relevant and up to date.",
+  "course": "Data Structures",
+  "faculty": "Faculty A",
+  "semester": "2025-Fall",
+  "date": "2025-08-27",
+  "rating": 5
+ },
+ {
+  "feedback": "The instructor is approachable and answers my doubts patiently.",
+  "course": "Data Structures",
+  "faculty": "Faculty A",
+  "semester": "2025-Fall",
+  "date": "2025-08-19",
+  "rating": 5
+ },
+ {
+  "feedback": "The instructor is approachable and answers my doubts patiently.",
+  "course": "Data Structures",
+  "faculty": "Faculty A",
+  "semester": "2025-Fall",
+  "date": "2025-08-18",
+  "rating": 2
+ },
+ {
+  "feedback": "Notes and recordings were easy to access.",
+  "course": "Data Structures",
+  "faculty": "Faculty A",
+  "semester": "2025-Fall",
+  "date": "2025-08-19",
+  "rating": 3
+ },
+ {
+  "feedback": "Learning resources are insufficient and notes are outdated.",
+  "course": "Data Structures",
+  "faculty": "Faculty A",
+  "semester": "2025-Fall",
+  "date": "2025-08-19",
+  "rating": 5
+ },
+ {
+  "feedback": "Exams were unfair and the grading is not transparent.",
+  "course": "Data Structures",
+  "faculty": "Faculty A",
+  "semester": "2025-Fall",
+  "date": "2025-08-18",
+  "rating": 1
+ },
+ {
+  "feedback": "Doubts are rarely addressed in class.",
+  "course": "Data Structures",
+  "faculty": "Faculty A",
+  "semester": "2025-Fall",
+  "date": "2025-11-22",
+  "rating": 5
+ },
+ {
+  "feedback": "Lectures were engaging and interesting.",
+  "course": "Data Structures",
+  "faculty": "Faculty A",
+  "semester": "2025-Fall",
+  "date": "2025-11-19",
+  "rating": 4
+ },
+ {
+  "feedback": "The instructor is approachable and answers my doubts patiently.",
+  "course": "Data Structures",
+  "faculty": "Faculty A",
+  "semester": "2025-Fall",
+  "date": "2025-09-23",
+  "rating": 2
+ },
+ {
+  "feedback": "The course is well organized and the schedule was followed.",
+  "course": "Data Structures",
+  "faculty": "Faculty A",
+  "semester": "2025-Fall",
+  "date": "2025-11-11",
+  "rating": 4
+ },
+ {
+  "feedback": "Labs and practical sessions were very useful.",
+  "course": "Data Structures",
+  "faculty": "Faculty A",
+  "semester": "2025-Fall",
+  "date": "2025-08-17",
+  "rating": 4
+ },
+ {
+  "feedback": "The teaching pace is too fast to follow.",
+  "course": "Machine Learning",
+  "faculty": "Faculty B",
+  "semester": "2025-Fall",
+  "date": "2025-11-14",
+  "rating": 1
+ },
+ {
+  "feedback": "Labs and practical sessions were very useful. But exams were unfair and the grading is not transparent.",
+  "course": "Machine Learning",
+  "faculty": "Faculty B",
+  "semester": "2025-Fall",
+  "date": "2025-11-19",
+  "rating": 4
+ },
+ {
+  "feedback": "Labs and practical sessions were very useful.",
+  "course": "Machine Learning",
+  "faculty": "Faculty B",
+  "semester": "2025-Fall",
+  "date": "2025-11-23",
+  "rating": 1
+ },
+ {
+  "feedback": "The course is well organized and the schedule was followed.",
+  "course": "Machine Learning",
+  "faculty": "Faculty B",
+  "semester": "2025-Fall",
+  "date": "2025-11-10",
+  "rating": 4
+ },
+ {
+  "feedback": "The teaching pace is too fast to follow.",
+  "course": "Machine Learning",
+  "faculty": "Faculty B",
+  "semester": "2025-Fall",
+  "date": "2025-11-12",
+  "rating": 2
+ },
+ {
+  "feedback": "The teaching pace is too fast to follow.",
+  "course": "Machine Learning",
+  "faculty": "Faculty B",
+  "semester": "2025-Fall",
+  "date": "2025-10-05",
+  "rating": 2
+ },
+ {
+  "feedback": "The teaching pace is too fast to follow.",
+  "course": "Machine Learning",
+  "faculty": "Faculty B",
+  "semester": "2025-Fall",
+  "date": "2025-11-13",
+  "rating": 5
+ },
+ {
+  "feedback": "Notes and recordings were easy to access.",
+  "course": "Machine Learning",
+  "faculty": "Faculty B",
+  "semester": "2025-Fall",
+  "date": "2025-10-23",
+  "rating": 4
+ },
+ {
+  "feedback": "The teaching pace is too fast to follow.",
+  "course": "Machine Learning",
+  "faculty": "Faculty B",
+  "semester": "2025-Fall",
+  "date": "2025-09-08",
+  "rating": 2
+ },
+ {
+  "feedback": "The teaching pace is too fast to follow.",
+  "course": "Machine Learning",
+  "faculty": "Faculty B",
+  "semester": "2025-Fall",
+  "date": "2025-08-05",
+  "rating": 4
+ },
+ {
+  "feedback": "Exams were unfair and the grading is not transparent.",
+  "course": "Machine Learning",
+  "faculty": "Faculty B",
+  "semester": "2025-Fall",
+  "date": "2025-08-15",
+  "rating": 5
+ }
+]

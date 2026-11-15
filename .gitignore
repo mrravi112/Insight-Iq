@@ -1,0 +1,12 @@
+node_modules/
+dist/
+__pycache__/
+*.pyc
+.env
+backend/data/
+.pytest_cache/
+*.db
+.venv/
+venv/
+*.timestamp-*.mjs
+
