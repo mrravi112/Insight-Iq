@@ -1,4 +1,4 @@
-import io, json, logging, pickle
+import io, json, logging, os, pickle
 from pathlib import Path
 from typing import Optional
 import pandas as pd
@@ -14,7 +14,25 @@ from .privacy import redact
 
 log = logging.getLogger("insightiq")  # never log feedback text
 app = FastAPI(title="InsightIQ API", version="1.0", description="Feedback analysis for course and faculty evaluation.")
-app.add_middleware(CORSMiddleware, allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"], allow_methods=["*"], allow_headers=["*"])
+
+cors_env = os.getenv("CORS_ORIGINS", "*")
+allowed_origins = [o.strip() for o in cors_env.split(",") if o.strip()] if cors_env != "*" else ["*"]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=allowed_origins,
+    allow_credentials=True if allowed_origins != ["*"] else False,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+@app.get("/")
+def root():
+    return {"status": "ok", "name": "InsightIQ API", "version": "1.0", "docs": "/docs"}
+
+@app.get("/health")
+def health():
+    return {"status": "healthy"}
+
 RAW = config.DATA_DIR / "raw"; RAW.mkdir(exist_ok=True)
 @app.on_event("startup")
 def _s(): init_db()

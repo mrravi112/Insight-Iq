@@ -1,3 +1,5 @@
+const API_BASE = ((import.meta as any).env?.VITE_API_URL || "").replace(/\/$/, "");
+
 export const token = (() => {
   let t = localStorage.getItem("iq_token");
   if (!t) {
@@ -18,7 +20,7 @@ export class ApiError extends Error {
 export async function api(path: string, opts: RequestInit = {}): Promise<any> {
   const h: any = { "X-Owner-Token": localStorage.getItem("iq_token") || token, ...(opts.headers || {}) };
   if (opts.body && !(opts.body instanceof FormData)) h["Content-Type"] = "application/json";
-  const r = await fetch("/api" + path, { ...opts, headers: h });
+  const r = await fetch(`${API_BASE}/api${path}`, { ...opts, headers: h });
   if (!r.ok) {
     let m = r.statusText;
     try {
@@ -31,7 +33,7 @@ export async function api(path: string, opts: RequestInit = {}): Promise<any> {
 }
 
 export async function download(path: string, opts: RequestInit, name: string) {
-  const r = await fetch("/api" + path, {
+  const r = await fetch(`${API_BASE}/api${path}`, {
     ...opts,
     headers: { "X-Owner-Token": localStorage.getItem("iq_token") || token, "Content-Type": "application/json" }
   });
