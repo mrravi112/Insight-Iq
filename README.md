@@ -241,6 +241,47 @@ This script simplifies launching the frontend and backend together.
 
 ---
 
+## 🌐 Production Deployment Guide
+
+InsightIQ is architected for dual-cloud deployment: **FastAPI backend on Render** and **React frontend on Vercel**.
+
+### 1. Backend Deployment (Render)
+
+1. Sign in to [Render](https://render.com) and click **New +** → **Web Service**.
+2. Connect your GitHub repository (`mrravi112/Insight-Iq`).
+3. Set the service configuration:
+   - **Name**: `insight-iq`
+   - **Root Directory**: `backend`
+   - **Runtime**: `Python 3`
+   - **Build Command**: `pip install -r requirements.txt`
+   - **Start Command**: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
+4. Add Environment Variables under **Settings** → **Environment**:
+   - `PYTHON_VERSION`: `3.12.8`
+   - `SENTIMENT_BACKEND`: `vader`
+   - `CORS_ORIGINS`: `https://insight-iq-smoky.vercel.app,http://localhost:5173`
+   - `MAX_UPLOAD_MB`: `25`
+   - `MAX_RECORDS`: `50000`
+5. Click **Deploy Web Service**.
+
+> **Note on Storage & Sleep Mode**:
+> Render free-tier instances sleep after 15 minutes of inactivity; the initial request after idling takes 45–60 seconds to spin up. SQLite data is stored in `backend/data/insightiq.db`. For persistent multi-instance production, set `DATABASE_URL` to a PostgreSQL instance URL (such as a Render Postgres database) and mount a Render Disk for `DATA_DIR`.
+
+### 2. Frontend Deployment (Vercel)
+
+1. Sign in to [Vercel](https://vercel.com) and click **Add New** → **Project**.
+2. Import your GitHub repository (`mrravi112/Insight-Iq`).
+3. Configure the project:
+   - **Framework Preset**: `Vite`
+   - **Root Directory**: Click *Edit* and select `frontend`.
+4. Add Environment Variables under **Settings** → **Environment Variables**:
+   - `VITE_API_URL`: `https://insight-iq-2zkg.onrender.com` *(without trailing slash)*
+5. Click **Deploy**.
+
+> **Automatic Proxy & Fallback**:
+> `frontend/vercel.json` automatically routes `/api/*` requests to the Render backend and handles SPA client-side routing on page refreshes (`/upload`, `/explorer`, etc.).
+
+---
+
 ## 🖥️ Application Preview
 
 Screenshots of the platform will be added here.

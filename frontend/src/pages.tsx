@@ -71,8 +71,9 @@ export function Upload() {
   useEffect(() => () => clearInterval(timer.current), []);
   useEffect(() => { if (up && !st) api(`/datasets/${up.id}/raw?page=${page}&q=${encodeURIComponent(q)}`).then(setRaw).catch(() => {}); }, [up, page, q]);
   async function send(f: File) {
+    if (busy) return;
     setErr(""); const max = (cfg.data?.max_upload_mb || 25) * 1048576;
-    if (f.size > max) return setErr(`File is ${(f.size / 1048576).toFixed(1)} MB; the limit is ${cfg.data?.max_upload_mb} MB.`);
+    if (f.size > max) return setErr(`File is ${(f.size / 1048576).toFixed(1)} MB; the limit is ${cfg.data?.max_upload_mb || 25} MB.`);
     setBusy(true); try { const fd = new FormData(); fd.append("file", f); const r = await api("/datasets/upload", { method: "POST", body: fd }); setUp(r); setMap(r.suggested_mapping); setSt(null); setPage(1); await refresh(); } catch (e: any) { setErr(e.message); } finally { setBusy(false); }
   }
   async function start() {
@@ -84,13 +85,16 @@ export function Upload() {
   const cols: string[] = up?.columns || []; const unmapped = !map.feedback;
   const cur = st ? Math.max(0, STAGES.indexOf(st.stage)) : -1;
   return <div className="grid">
+    {cfg.err && <div className="notice" role="alert" style={{ marginBottom: 12 }}><AlertTriangle size={14} style={{ verticalAlign: -2 }} /> <b>Connection notice:</b> {cfg.err}</div>}
     {err && <Err e={err} />}
-    {!up && <label className={"drop" + (drag ? " on" : "")} onDragOver={e => { e.preventDefault(); setDrag(true); }} onDragLeave={() => setDrag(false)} onDrop={e => { e.preventDefault(); setDrag(false); e.dataTransfer.files[0] && send(e.dataTransfer.files[0]); }}>
-      <UploadCloud size={34} color="var(--orange)" /><h2 style={{ marginTop: 8 }}>{busy ? "Uploading and parsing…" : "Drop a feedback file here"}</h2>
-      <p className="muted">or <span style={{ color: "var(--orange)", fontWeight: 600 }}>choose a file</span> — {cfg.data ? cfg.data.formats.join("  ") : ""}<br />Up to {cfg.data?.max_upload_mb} MB and {cfg.data?.max_records?.toLocaleString()} records</p>
-      <input type="file" hidden accept={cfg.data?.formats.join(",")} onChange={e => e.target.files?.[0] && send(e.target.files[0])} /></label>}
+    {!up && <label className={"drop" + (drag ? " on" : "") + (busy ? " busy" : "")} onDragOver={e => { e.preventDefault(); if (!busy) setDrag(true); }} onDragLeave={() => setDrag(false)} onDrop={e => { e.preventDefault(); setDrag(false); if (!busy && e.dataTransfer.files[0]) send(e.dataTransfer.files[0]); }}>
+      <UploadCloud size={34} color="var(--orange)" /><h2 style={{ marginTop: 8 }}>{busy ? "Uploading and parsing file… please wait" : "Drop a feedback file here"}</h2>
+      {busy ? <div className="bar" style={{ width: "60%", margin: "14px auto" }}><div style={{ width: "100%", animation: "pulse 1.5s infinite" }} /></div> : null}
+      <p className="muted">or <span style={{ color: "var(--orange)", fontWeight: 600 }}>choose a file</span> — {cfg.data ? cfg.data.formats.join("  ") : "CSV, XLSX, XLS, JSON, TXT, PDF, DOCX"}<br />Up to {cfg.data?.max_upload_mb || 25} MB and {cfg.data?.max_records?.toLocaleString() || "50,000"} records</p>
+      <input type="file" hidden disabled={busy} accept={cfg.data?.formats?.join(",") || ".csv,.xlsx,.xls,.json,.txt,.pdf,.docx"} onChange={e => !busy && e.target.files?.[0] && send(e.target.files[0])} /></label>}
     {!up && <Card title="Accepted layouts"><ul className="muted"><li>CSV / Excel / JSON: one row per response; any column names (you confirm the mapping).</li><li>TXT: one comment per line, or blank-line separated multi-line comments, or comments separated by a line of <code>---</code>. Numbering and bullets are stripped.</li><li>PDF / DOCX: tables are extracted if present; otherwise text is split the same way as TXT. Scanned PDFs (images) are not supported. Check the preview before analysing.</li></ul></Card>}
     {up && !st && <>
+      <div className="notice info" style={{ marginBottom: 12 }}>✓ Upload successful! File <b>{up.filename}</b> was parsed successfully ({up.rows} records detected). Please review and confirm column mappings below.</div>
       <Card title={`Map columns — ${up.filename}`} sub={`${up.rows} rows detected. Auto-detected where names were recognised; nothing is guessed from content.`}>
         {unmapped && <div className="notice" role="alert" style={{ marginBottom: 12 }}>No feedback column was recognised. Choose which column holds the comments{up.ambiguous_text_columns?.length ? ` (long-text candidates: ${up.ambiguous_text_columns.join(", ")})` : ""}.</div>}
         <div className="grid g3">{cfg.data?.fields.map((f: string) => <label key={f}><div className="muted" style={{ fontSize: 12 }}>{f === "feedback" ? "Feedback text (required)" : f === "label" ? "Ground-truth sentiment (optional, for evaluation)" : f}</div>
@@ -103,6 +107,7 @@ export function Upload() {
         {raw && <div className="tablewrap"><table><thead><tr>{raw.columns.map((c: string) => <th key={c} style={c === map.feedback ? { color: "var(--orange)" } : {}}>{c}{c === map.feedback ? " (feedback)" : ""}</th>)}</tr></thead><tbody>{raw.rows.map((r: any, i: number) => <tr key={i}>{raw.columns.map((c: string) => <td key={c}>{String(r[c]).slice(0, 220)}</td>)}</tr>)}</tbody></table></div>}
         <Pager page={page} total={raw?.total || 0} size={25} set={setPage} /></Card></>}
     {st && <Card title={st.status === "completed" ? "Analysis completed" : st.status === "failed" ? "Analysis failed" : st.status === "cancelled" ? "Analysis cancelled" : "Analysing…"}>
+      {st.status === "completed" && <div className="notice info" style={{ marginBottom: 14 }}>✓ Analysis completed successfully! You can now explore the insights on the dashboard.</div>}
       <div className="stages" aria-live="polite">{STAGES.map((s, i) => <div key={s} className={"stage " + (st.status === "completed" || i < cur ? "done" : i === cur && st.status === "processing" ? "cur" : "")}><span className="dot" />{s}</div>)}</div>
       <div className="bar" style={{ margin: "14px 0" }}><div style={{ width: st.progress + "%" }} /></div>
       {st.error && <Err e={st.error} />}

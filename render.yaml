@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: insightiq-backend
+    name: insight-iq-backend
     runtime: python
     rootDir: backend
     buildCommand: pip install -r requirements.txt
@@ -10,4 +10,11 @@ services:
         value: 3.12.8
       - key: SENTIMENT_BACKEND
         value: vader
-
+      - key: CORS_ORIGINS
+        value: "http://localhost:5173,http://127.0.0.1:5173,https://insight-iq-smoky.vercel.app"
+      - key: MAX_UPLOAD_MB
+        value: "25"
+      - key: MAX_RECORDS
+        value: "50000"
+      - key: MIN_SAMPLE
+        value: "20"

@@ -2,7 +2,8 @@ import io, json, logging, os, pickle
 from pathlib import Path
 from typing import Optional
 import pandas as pd
-from fastapi import FastAPI, UploadFile, File, Header, HTTPException, Depends, BackgroundTasks, Query, Body
+from fastapi import FastAPI, UploadFile, File, Header, HTTPException, Depends, BackgroundTasks, Query, Body, Security
+from fastapi.security import APIKeyHeader
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
 from sklearn.metrics import accuracy_score, precision_recall_fscore_support, confusion_matrix
@@ -13,25 +14,53 @@ from .nlp import get_sentiment, classify
 from .privacy import redact
 
 log = logging.getLogger("insightiq")  # never log feedback text
-app = FastAPI(title="InsightIQ API", version="1.0", description="Feedback analysis for course and faculty evaluation.")
+app = FastAPI(
+    title="InsightIQ API",
+    version="1.0",
+    description="Feedback analysis API for course and faculty evaluation with multi-tenant isolation via X-Owner-Token."
+)
 
-cors_env = os.getenv("CORS_ORIGINS", "*")
-allowed_origins = [o.strip() for o in cors_env.split(",") if o.strip()] if cors_env != "*" else ["*"]
+DEFAULT_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://localhost:3000",
+    "https://insight-iq-smoky.vercel.app",
+]
+
+env_origins = os.getenv("CORS_ORIGINS", "").strip()
+if env_origins:
+    origins = [o.strip() for o in env_origins.split(",") if o.strip()]
+else:
+    origins = DEFAULT_ORIGINS
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=allowed_origins,
-    allow_credentials=True if allowed_origins != ["*"] else False,
+    allow_origins=origins,
+    allow_origin_regex=os.getenv("CORS_ORIGIN_REGEX", r"https:\/\/insight-iq.*\.vercel\.app"),
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["*"],
 )
 
 @app.get("/")
 def root():
-    return {"status": "ok", "name": "InsightIQ API", "version": "1.0", "docs": "/docs"}
+    return {
+        "status": "ok",
+        "name": "InsightIQ API",
+        "version": "1.0",
+        "docs": "/docs",
+    }
 
 @app.get("/health")
 def health():
-    return {"status": "healthy"}
+    return {"status": "ok"}
+
+api_key_header = APIKeyHeader(
+    name="X-Owner-Token",
+    auto_error=False,
+    description="Client token (min 16 characters). Used to partition private datasets per browser/client."
+)
 
 RAW = config.DATA_DIR / "raw"; RAW.mkdir(exist_ok=True)
 @app.on_event("startup")
@@ -41,9 +70,15 @@ def db():
     s = SessionLocal()
     try: yield s
     finally: s.close()
-def owner(x_owner_token: str = Header(None)):
-    if not x_owner_token or len(x_owner_token) < 16: raise HTTPException(401, "Missing or invalid X-Owner-Token header.")
-    return x_owner_token
+
+def owner(x_owner_token: Optional[str] = Security(api_key_header)):
+    token = (x_owner_token or "").strip()
+    if not token or len(token) < 16:
+        raise HTTPException(
+            status_code=401,
+            detail="Missing or invalid X-Owner-Token header. Provide a client token with at least 16 characters."
+        )
+    return token
 def get_ds(dataset_id: int, s=Depends(db), o=Depends(owner)) -> Dataset:
     ds = s.get(Dataset, dataset_id)
     if not ds or ds.owner != o: raise HTTPException(404, "Dataset not found.")   # 404 for others' data: no existence leak
