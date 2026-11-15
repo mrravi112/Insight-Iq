@@ -297,16 +297,27 @@ If you would like to improve InsightIQ:
 
 ---
 
-## 👨‍💻 Developer
+## 👨‍💻 Developers
 
-**Rattanesh Guleria**
+### Rattanesh Guleria & Ravi
 
-Engineering Student | Full-Stack Developer
-
-- **Personal GitHub:** [@rattaneshguleria](https://github.com/rattaneshguleria)
-- **Project Repository:** [InsightIQ](https://github.com/mrravi112/Insight-Iq)
+| Developer | GitHub Profile |
+|---|---|
+| **Rattanesh Guleria** | [@rattaneshguleria](https://github.com/rattaneshguleria) |
+| **Ravi** | [@mrravi112](https://github.com/mrravi112) |
 
 ---
+
+<div align="center">
+
+### 💡 InsightIQ
+**Less Manual Analysis. More Meaningful Insights.**
+
+*Turning Data into Intelligence.*
+
+**Built with ❤️ by Rattanesh Guleria & Ravi**
+
+</div>
 
 ## 📄 License
 
