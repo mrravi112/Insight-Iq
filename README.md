@@ -376,6 +376,6 @@ This project is available for educational and development purposes. Add an appro
 
 ⭐ If you find this project interesting, consider giving the repository a star!
 
-**Built with ❤️ by Rattanesh Guleria**
+**Built with ❤️ by Rattanesh Guleria & Ravi**
 
 </div>
